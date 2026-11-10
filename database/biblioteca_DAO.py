@@ -11,3 +11,15 @@ class BibliotecaDAO:
         pass
 
     # TODO
+    def get_biblioteche(self) -> list[Biblioteca] | None:
+        cnx = DBConnect.get_connection()
+        if cnx is None:
+            return None
+        cursor = cnx.cursor(dictionary=True)
+        try:
+            cursor.execute('SELECT * FROM biblioteca ORDER BY nome')
+            righe = cursor.fetchall()
+            return [Biblioteca(**riga) for riga in righe]
+        finally:
+            cursor.close()
+            cnx.close()
